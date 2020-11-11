@@ -15,6 +15,19 @@ describe Game do
     end
   end
 
+  describe '#current_turn' do
+    it 'starts as player_one' do
+      expect(game.current_turn).to eq(player_one)
+    end
+  end
+
+  describe '#switch_turns' do
+    it 'switches whose turn it is after an attack' do
+      game.switch_turns
+      expect(game.current_turn).to eq(player_two)
+    end
+  end
+
   describe '#attack' do
     it 'calls the receive_damage method' do
       expect(player_two).to receive(:receive_damage)
