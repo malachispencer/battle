@@ -22,8 +22,6 @@ class Game
     @current_turn = opponent_of(current_turn)
   end
 
-  private
-
   def opponent_of(current_turn_player)
     @players.find { |player| player != current_turn_player }
   end
