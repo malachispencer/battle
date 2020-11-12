@@ -19,6 +19,7 @@ class Battle < Sinatra::Base
 
   get '/play' do
     @game = $game
+    redirect('/outcome') if @game.winner != nil
     erb(:play)
   end
 
@@ -31,6 +32,11 @@ class Battle < Sinatra::Base
   post '/switch-turns' do
     $game.switch_turns
     redirect('/play')
+  end
+
+  get '/outcome' do
+    @game = $game
+    erb(:outcome)
   end
 
   run! if app_file == $0

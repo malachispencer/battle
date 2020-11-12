@@ -30,8 +30,18 @@ describe Game do
 
   describe '#attack' do
     it 'calls the receive_damage method' do
+      allow(game).to receive(:assign_winner) { nil }
       expect(player_two).to receive(:receive_damage)
       game.attack(player_two)
+    end
+  end
+
+  describe '#winner?' do
+    it 'returns true if player_two has 0 points' do
+      allow(player_one).to receive(:hit_points) { 60 }
+      allow(player_two).to receive(:hit_points) { 0 }
+      game.assign_winner
+      expect(game.winner).to eq(player_one)
     end
   end
 end
