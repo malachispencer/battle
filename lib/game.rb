@@ -1,10 +1,11 @@
 class Game
-  attr_reader :current_turn, :winner
+  attr_reader :current_turn, :winner, :loser
 
   def initialize(player_one, player_two)
     @players = [player_one, player_two]
     @current_turn = player_one
     @winner = nil
+    @loser = nil
   end
 
   def player_one
@@ -17,7 +18,6 @@ class Game
 
   def attack(player)
     player.receive_damage
-    assign_winner
   end
 
   def switch_turns
@@ -28,9 +28,23 @@ class Game
     @players.find { |player| player != current_turn_player }
   end
 
-  def assign_winner
+  def status
+    if winner?
+      assign_outcomes
+      "complete"
+    end
+  end
+
+  private
+
+  def winner?
+    @players.any? { |player| player.hit_points <= 0 }
+  end
+
+  def assign_outcomes
     @players.each do |player|
-      @winner = opponent_of(player) if player.hit_points <= 0
+      @winner = player if player.hit_points > 0
+      @loser = player if player.hit_points <= 0
     end
   end
 end

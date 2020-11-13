@@ -30,18 +30,41 @@ describe Game do
 
   describe '#attack' do
     it 'calls the receive_damage method' do
-      allow(game).to receive(:assign_winner) { nil }
+      allow(game).to receive(:winner?) { false }
       expect(player_two).to receive(:receive_damage)
       game.attack(player_two)
     end
   end
 
-  describe '#winner?' do
-    it 'returns true if player_two has 0 points' do
-      allow(player_one).to receive(:hit_points) { 60 }
+  describe '#status' do
+    it 'calls the winner? method' do
+      expect(game).to receive(:winner?)
+      game.status
+    end
+
+    it 'calls assign_outcomes if winner? returns true' do
+      allow(player_one).to receive(:hit_points) { 10 }
       allow(player_two).to receive(:hit_points) { 0 }
-      game.assign_winner
-      expect(game.winner).to eq(player_one)
+      expect(game).to receive(:assign_outcomes)
+      game.status
+    end
+
+    it "returns 'complete' if there is a winner and loser" do
+      allow(player_one).to receive(:hit_points) { 10 }
+      allow(player_two).to receive(:hit_points) { 0 }
+      expect(game.status).to eq('complete')
+    end
+
+    it 'changes winner from nil to winner if game is complete' do
+      allow(player_one).to receive(:hit_points) { 10 }
+      allow(player_two).to receive(:hit_points) { 0 }
+      expect { game.status }.to change { game.winner }.from(nil).to(player_one)
+    end
+
+    it 'changes loser from nil to loser if game is complete' do
+      allow(player_one).to receive(:hit_points) { 10 }
+      allow(player_two).to receive(:hit_points) { 0 }
+      expect { game.status }.to change { game.loser }.from(nil).to(player_two)
     end
   end
 end

@@ -19,7 +19,7 @@ class Battle < Sinatra::Base
 
   get '/play' do
     @game = $game
-    redirect('/outcome') if @game.winner != nil
+    redirect('/outcome') if @game.status == 'complete'
     erb(:play)
   end
 
